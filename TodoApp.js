@@ -52,7 +52,14 @@ class TodoApp extends React.Component {
 					username="william" 
 					todoCount={todos.filter((todo) => !todos.completed).length}
 				/>
-				<InputField placeholder="請輸入待辦事項"/>
+				<InputField 
+					placeholder="請輸入待辦事項"
+					onSubmitEditing ={
+						(title) => this.setState({
+							todos: _createTodo(todos, title)
+						})
+					}
+				/>
 				<TodoList 
 					todos={todos}
 					//呼叫 _deleteTodo 更新 Todo狀態
@@ -78,6 +85,17 @@ const _deleteTodo = (todos, id) => {
 	if(idx !== -1) todos.splice(idx, 1); //將todos中點到的id做刪除
 	return todos;
 };
+
+//將新增邏輯抽成一個function
+const _createTodo = (todos, title) => {
+	todos.push({
+		id: todos[todos.length - 1].id + 1,
+		title,
+		completed: false
+	});
+	return todos;
+}
+
 
 
 window.App.TodoApp = TodoApp;

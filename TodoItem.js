@@ -28,13 +28,17 @@ class TodoItem extends React.Component {
     const { 
       title, 
       completed,
-      onDelete
+      onDelete,
+      onToggle
     } = this.props;
 
 
     return (
       <div>
-        <input type="checkbox" check={completed} />
+        <input type="checkbox" 
+               check={completed} 
+               onChange={() => onToggle && onToggle(!completed)}
+        />
         <span onDoubleClick={this.toggleEditMode}> {title} </span>
         <button onClick={() => onDelete && onDelete()}>x</button>
       </div>
@@ -74,8 +78,8 @@ class TodoItem extends React.Component {
 TodoItem.propTypes = {
   title : React.PropTypes.string.isRequired,
   completed : React.PropTypes.bool.isRequired,
-  onDelete : React.PropTypes.func  //注意這裡的預設為func
-
+  onDelete : React.PropTypes.func,  //注意這裡的預設為func
+  onToggle : React.PropTypes.func
 };
 /*
 TodoItem.defaultProps = {
