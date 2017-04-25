@@ -5,8 +5,6 @@ class TodoItem extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-
-
     this.state = {editable:false};
  // 7. 在 ES6 component class 中，你必須手動綁定 this
     this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -16,7 +14,6 @@ class TodoItem extends React.Component {
 
   toggleEditMode() {
     //更新元件狀態來切換
-
     //當toggleEditMode被呼叫時 就會更新 editable的值 !this.state.editable 驚嘆號做 true <-->false
     this.setState({editable: !this.state.editable});
   }
@@ -36,7 +33,7 @@ class TodoItem extends React.Component {
     return (
       <div>
         <input type="checkbox" 
-               check={completed} 
+               checked={completed} 
                onChange={() => onToggle && onToggle(!completed)}
         />
         <span onDoubleClick={this.toggleEditMode}> {title} </span>
@@ -55,14 +52,25 @@ class TodoItem extends React.Component {
       <InputField
         autoFocus  // 5. autoFocus 讓使用者切換到編輯模式後，可以立即編打
         placeholder="編輯待辦事項"
+      // 1. 將 value 屬性改為 defaultValue：
+      //    如果只給予 value，不給予 onChange callback，
+      //    使用者輸入的資料將不會被更新，因此改為 defaultValue。
+      // 2. 由於會改變元件的state狀態 故要用value 可控元件
         value={this.props.title}
         onBlur={this.toggleEditMode}  //當離開關注的地方 會執行toggleEditMode
-        onKeyDown={ (e) => {
+        onKeyDown={ (e) => { //使用者按下ESC 則切換為 瀏覽模式
           if (e.keyCode === 27) {
             e.preventDefault();
             this.toggleEditMode();
 
           }
+        }}
+      // 2. 傳遞 onSubmitEditing callback，該 callback 做兩件事情：
+      //    a. 呼叫上層元件的 onUpdate callback
+      //    b. 切換為「預覽模式」
+        onSubmitEditing={(content) => {
+           onUpdate && onUpdate(content);
+           this.toggleEditMode();
         }}
       />
     );

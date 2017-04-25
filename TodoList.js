@@ -4,9 +4,15 @@ const {TodoItem} = window.App;
 
 
 class TodoList extends React.Component{
+
+//    使用 props 傳遞 callback 的好處是，可以不用在底層 view 元件中加入業務邏輯。
+//
+//    小筆記：讓 view 元件職責簡單，只需顯示 props 的資料，和呼叫 props 中相對應的 callback
+	
 	render() {
-		const { 
+		const {
 			todos,
+			onUpdateTodo,
 			onDeleteTodo,
 			onToggleTodo
 		} = this.props; 
@@ -18,6 +24,7 @@ class TodoList extends React.Component{
 				<TodoItem
 					title={todo.title}
 					completed={todo.completed}
+					onUpdate={(content) => onUpdateTodo && onUpdateTodo(todo.id, content)}
 					onDelete={() => onDeleteTodo && onDeleteTodo(todo.id)}
 					onToggle={(completed) => onToggleTodo && onToggleTodo(todo.id, completed)}
 				/>
@@ -32,16 +39,12 @@ class TodoList extends React.Component{
 	}
 }
 
-const _toggleTodo = (todos, id, completed) => {
-	const target = todos.find((todo) => todo.id === id);
-	if(target) target.completed = completed;
-	return todos;
-};
 
 TodoList.propTypes = {
   todos: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
   onDeleteTodo: React.PropTypes.func,
-  onToggleTodo: React.PropTypes.func
+  onToggleTodo: React.PropTypes.func,
+  onUpdateTodo: React.PropTypes.func
 };
 
 
