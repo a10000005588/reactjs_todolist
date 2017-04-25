@@ -60,24 +60,21 @@ class TodoApp extends React.Component {
 	    //    所以我們將 todos 儲存在上層元件 (TodoApp) 的 state 中。
 
 	    this.state = {
-	    	todos: [
-				{
-					id: 0,
-					title: 'Item1',
-					completed: false
-				},{
-					id: 1,
-					title: 'Item2',
-					completed: false
-				},{
-					id: 2,
-					title: 'Item3',
-					completed: false
-
-				}
-			]
+	    	todos: [] //將原本的 todos 狀態清空
 	    };
+		// 2. 實作 componentDidMount 方法：
+		//    該方法在元件第一次 render 後，會被呼叫；
+
 	}
+
+	componentDidMount(){
+    	let root = 'http://jsonplaceholder.typicode.com';
+	//使用 ajax 請求 API：
+	//並將取回的待辦資料更新元件 state（見下一步）
+		fetch(root + '/todos')
+			.then((response) => response.json())
+			.then((todos) => this.setState({ todos }));
+    }
 
 	updateTodosBy(updateFn) {
 
