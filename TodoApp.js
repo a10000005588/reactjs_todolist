@@ -68,12 +68,17 @@ class TodoApp extends React.Component {
 	}
 
 	componentDidMount(){
+		/*
     	let root = 'http://jsonplaceholder.typicode.com';
 	//使用 ajax 請求 API：
 	//並將取回的待辦資料更新元件 state（見下一步）
 		fetch(root + '/todos')
 			.then((response) => response.json())
 			.then((todos) => this.setState({ todos }));
+		*/
+		fetch('./todos.json')
+			.then((response) => response.json())
+			.then((todos) => this.setState({ todos}));
     }
 
 	updateTodosBy(updateFn) {
