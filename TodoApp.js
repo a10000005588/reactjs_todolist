@@ -41,7 +41,7 @@ const _updateTodo = (todos, id, title) => {
 
 const _toggleTodo = (todos, id, completed) => {
 	const target = todos.find((todo) => todo.id === id);
-	if(target) target.title = title;
+	if(target) target.completed = completed;
 	return todos;
 };
 
@@ -98,7 +98,7 @@ class TodoApp extends React.Component {
 				<TodoHeader 
 					title="william's todo" 
 					username="william" 
-					todoCount={todos.filter((todo) => !todos.completed).length}
+					todoCount={todos.filter((todo) => !todo.completed).length}
 				/>
 				<InputField 
 					placeholder="請輸入待辦事項"

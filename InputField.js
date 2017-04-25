@@ -6,7 +6,7 @@ class InputField extends React.Component {
 		this.state = { value: props.value || ''};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyDown = this.handleKeyDown.bind(this);
-		
+		this.handleButtonDown = this.handleButtonDown.bind(this);
 	}
 
 	//當使用者按下enter (keycode = 13)
@@ -14,12 +14,9 @@ class InputField extends React.Component {
 	//將資料傳遞給上層元件
 
 	handleChange(e) {
-		console.log("hello");
 
 		this.setState({value : e.target.value});
-		//this.setState({value: 'fuck'});
-
-		//會改變你目前輸入得值
+		//會改變你目前輸入的值
 	}
 
 	handleKeyDown(e){
@@ -37,20 +34,36 @@ class InputField extends React.Component {
 		const { value } = this.state;
 		switch(e.keyCode) {
 			case 13:
-				console.log("enter");
-				//如果使用者都沒有鍵入任何內容 不會呼叫callback
+	     		//如果使用者都沒有鍵入任何內容 不會呼叫callback
 				if(value.trim()){
 					onSubmitEditing && onSubmitEditing(value);
 				}
 
 				//將輸入匡資料清空
-				e.target.value = '';
-				//this.setState({value: ''});
+				//e.target.value = '';
+				this.setState({value: ''});
 			break;
 		}
 		//如果上層元件傳遞 onKeyDown callback 我們必需觸發他
 
-		onKeyDown && onKeyDown(e);
+		//onKeyDown && onKeyDown(e);
+	}
+
+	handleButtonDown(){
+		
+		const {
+			onSubmitEditing
+		} = this.props;
+
+
+		const { value } = this.state;
+		if(value.trim()){
+			onSubmitEditing && onSubmitEditing(value);
+		}
+
+		this.setState({value: ''});
+
+		//onKeyDown && onKeyDown(e);
 	}
 
 	render() {
@@ -64,7 +77,7 @@ class InputField extends React.Component {
 					   onKeyDown = {this.handleKeyDown}
 					   //當按下任何按鍵做觸發
 				/>
-				<button onclick={this.testing}>新增</button>
+				<button onClick={this.handleButtonDown}>新增</button>
 			</div>
 		);
 	}
