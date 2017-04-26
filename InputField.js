@@ -3,7 +3,9 @@ class InputField extends React.Component {
 	constructor(props, context){
 		super(props, context);
 		
-		this.state = { value: props.value || ''};
+		this.state = { 
+			value: props.value || ''
+		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 		this.handleButtonDown = this.handleButtonDown.bind(this);
@@ -50,24 +52,36 @@ class InputField extends React.Component {
 	}
 
 	handleButtonDown(){
-		
+		console.log(this.props.submitName);
 		const {
 			onSubmitEditing
 		} = this.props;
-
-
 		const { value } = this.state;
-		if(value.trim()){
-			onSubmitEditing && onSubmitEditing(value);
+
+		switch(this.props.submitName){
+			// case '修改':
+			// 		onSubmitEditing && onSubmitEditing(value);
+				
+			// 	break;
+			case '新增':
+
+				if(value.trim()){
+					onSubmitEditing && onSubmitEditing(value);
+				}
+
+				this.setState({value: ''});
+				break;
+		
+				//onKeyDown && onKeyDown(e);
 		}
-
-		this.setState({value: ''});
-
-		//onKeyDown && onKeyDown(e);
 	}
 
 	render() {
 		return (
+		 //...this.props將 上層元件的其他屬性 立榮TodoItem.js
+	     //傳來的 autoFocus ,onBlur={this.toggleEditMode} , 
+	     //注意這裡的onBlur的函式 由於是父元件的 所以要在最上面的
+	     //constructor中 用super來繼承 才能使用！
 			<div>
 				<input {...this.props} 
 					   type="text" 
@@ -77,7 +91,7 @@ class InputField extends React.Component {
 					   onKeyDown = {this.handleKeyDown}
 					   //當按下任何按鍵做觸發
 				/>
-				<button onClick={this.handleButtonDown}>新增</button>
+				<button onClick={this.handleButtonDown}>{this.props.submitName}</button>
 			</div>
 		);
 	}

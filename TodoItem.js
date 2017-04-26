@@ -5,7 +5,9 @@ class TodoItem extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {editable:false};
+    this.state = {
+      editable:false
+    };
  // 7. 在 ES6 component class 中，你必須手動綁定 this
     this.toggleEditMode = this.toggleEditMode.bind(this);
 
@@ -26,7 +28,8 @@ class TodoItem extends React.Component {
       title, 
       completed,
       onDelete,
-      onToggle
+      onToggle,
+      onUpdate
     } = this.props;
 
 
@@ -43,7 +46,11 @@ class TodoItem extends React.Component {
   }
 
   renderEditMode() {
-
+    const { 
+      title, 
+      onSubmitEditing,
+      onUpdate
+    } = this.props;
     //const {title} = this.props;  
     //注意這裡下面的 toggleEditMode 
     //如果沒有在最上面 用bind() 綁定 那麼就得在每個function內做綁定的動作 非常麻煩！
@@ -57,7 +64,10 @@ class TodoItem extends React.Component {
       //    使用者輸入的資料將不會被更新，因此改為 defaultValue。
       // 2. 由於會改變元件的state狀態 故要用value 可控元件
         value={this.props.title}
-        onBlur={this.toggleEditMode}  //當離開關注的地方 會執行toggleEditMode
+        onBlur={this.toggleEditMode}  
+        //當離開關注的地方 會執行toggleEditMode
+        //onBlur會影響 "修改"按鍵無法執行
+
         onKeyDown={ (e) => { //使用者按下ESC 則切換為 瀏覽模式
           if (e.keyCode === 27) {
             e.preventDefault();
@@ -72,6 +82,7 @@ class TodoItem extends React.Component {
            onUpdate && onUpdate(content);
            this.toggleEditMode();
         }}
+        submitName="請按Enter鍵修改"
       />
     );
   }

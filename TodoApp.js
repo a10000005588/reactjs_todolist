@@ -105,7 +105,7 @@ class TodoApp extends React.Component {
 				<InputField 
 					placeholder="請輸入待辦事項"
 					onSubmitEditing = {this.updateTodosBy(_createTodo)}
-
+					submitName="新增"
 				/>
 
 				 <TodoList
