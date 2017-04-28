@@ -1,50 +1,10 @@
+
 const {
-	InputField,
-	TodoHeader,
-	TodoList
+  TodoActions,
+  CreateTodoFieldContainer,
+  TodoHeaderContainer,
+  TodoListContainer
 } = window.App;
-
-// 4. 將 todos 定義於上層元件中：
-//    因為資料來源有可能來自伺服器等，為了開發方便，先宣告於 TodoApp 中；
-//    並讓下層元件 (TodoList) 只需理會上層元件遞送的 props 即可！
-
-const _deleteTodo = (todos, id) => {
-	const idx = todos.findIndex((todo) => todo.id === id);
-
-	//利用findIndext傳入todo.id  找出=== 點到的id  並作回傳
-	//找不到傳回 -1
-
-	if(idx !== -1) todos.splice(idx, 1); //將todos中點到的id做刪除
-	console.log("delete "+idx+"success");
-	return todos;
-};
-
-//將新增邏輯抽成一個function
-const _createTodo = (todos, title) => {
-
-	console.log("createTodo");
-
-	todos.push({
-		id: todos[todos.length - 1].id + 1,
-		title,
-		completed: false
-	});
-	return todos;
-};
-
-//將編輯邏輯抽成一個function
-const _updateTodo = (todos, id, title) => {
-	const target = todos.find((todo) => todo.id === id);
-	if(target) target.title = title;
-	return todos;
-};  //記得加分號 const 是ES6的變數宣告方法
-
-const _toggleTodo = (todos, id, completed) => {
-	const target = todos.find((todo) => todo.id === id);
-	if(target) target.completed = completed;
-	return todos;
-};
-
 
 
 class TodoApp extends React.Component {
@@ -60,7 +20,8 @@ class TodoApp extends React.Component {
 	    //    所以我們將 todos 儲存在上層元件 (TodoApp) 的 state 中。
 
 	    this.state = {
-	    	todos: [] //將原本的 todos 狀態清空
+	    	//初始資料改為從TodoStore 中拿取
+	    	todos: TodoStore.getAll() 
 	    };
 		// 2. 實作 componentDidMount 方法：
 		//    該方法在元件第一次 render 後，會被呼叫；
@@ -75,67 +36,96 @@ class TodoApp extends React.Component {
 		fetch(root + '/todos')
 			.then((response) => response.json())
 			.then((todos) => this.setState({ todos }));
-		*/
+		
 		fetch('./todos.json')
 			.then((response) => response.json())
 			.then((todos) => this.setState({ todos}));
+		*/
+		
+		TodoActions.loadTodos();
+		//向TodoStore 註冊監聽器:
+		//當監聽器被觸發 便讓state and TodoStore資料同步
+		// this._removeChangeListener = TodoStore.addChangeListener(
+		// 	() => this.setState({ todos: TodoStore.getAll() })
+		// );
     }
 
-	updateTodosBy(updateFn) {
+/*
+    componentWillUnmount() {
+    	//向TodoStore 註銷監聽器
+    	this._removeChangeListener();
+    }
+*/
+    //改由TodoStore做資料邏輯的處理
 
-		return (...args) => {
-			this.setState({
-				todos: updateFn(this.state.todos, ...args)
-			});
-		};
-	}
+	// updateTodosBy(updateFn) {
 
+	// 	return (...args) => {
+	// 		this.setState({
+	// 			todos: updateFn(this.state.todos, ...args)
+	// 		});
+	// 	};
+	// }
 
+ // 7. 所有渲染的資料從 state 中取，這份 state 與 TodoStore 是同步的；
+ //    所有改變資料的操作都改為調用 TodoActions
 	render(){
 
 		const {todos} = this.state;
 		// var todos = this.state.todos
 		return (
 			<div>
-				<TodoHeader 
-					title="william's todo" 
-					username="william" 
-					todoCount={todos.filter((todo) => !todo.completed).length}
-				/>
-				<InputField 
-					placeholder="請輸入待辦事項"
-					onSubmitEditing = {this.updateTodosBy(_createTodo)}
-					submitName="新增"
-				/>
+				// <TodoHeader 
+				// 	title="William's todo" 
+				// 	username="William" 
+				// 	todoCount={todos.filter((todo) => !todo.completed).length}
+				// />
+				// <InputField 
+				// 	placeholder="請輸入待辦事項"
+				// 	onSubmitEditing = {TodoActions.createTodo}
+				// 	submitName="新增"
+				// />
 
-				 <TodoList
-				 	todos={todos}
-				 	onUpdateTodo={this.updateTodosBy(_updateTodo)}
-				 	onToggleTodo={this.updateTodosBy(_toggleTodo)}
-				 	onDeleteTodo={this.updateTodosBy(_deleteTodo)}
-				 />
+				//  <TodoList
+				//  	todos={todos}
+				//  	onUpdateTodo={TodoActions.updateTodo}
+				//  	onToggleTodo={TodoActions.toggleTodo}
+				//  	onDeleteTodo={TodoActions.deleteTodo}
+				//  />
+				
+				<TodoHeaderContainer />
+		        <CreateTodoFieldContainer />
+		        <TodoListContainer />
 			</div>
 		);
 	}
 }
+
 /*
-<TodoList 
-todos={todos}
-//呼叫 _deleteTodo 更新 Todo狀態
-onDeleteTodo= {
-	(...args) => this.setState({
-		todos: _deleteTodo(todos, ...args)
-	})
-}
-//呼叫 _updateTodo 更新todos狀態
-onUpdateTodo ={
-	(id,title) => this.setState({
-		todos: _updataTodo(todos, id, state)
-	})
-}
+	<TodoList 
+		todos={todos}
+		//呼叫 _deleteTodo 更新 Todo狀態
+		onDeleteTodo= {
+			(...args) => this.setState({
+				todos: _deleteTodo(todos, ...args)
+			})
+		}
+		//呼叫 _updateTodo 更新todos狀態
+		onUpdateTodo ={
+			(id,title) => this.setState({
+				todos: _updataTodo(todos, id, state)
+			})
+		}
+	/>
 */ 
 //改成統一用updateTodosBy()來取代上述寫法
 //將刪除邏輯抽成一個function
+
+/*
+	 TodoApp 與 Store 同步資料的 View，我們稱 Controller View；
+	 而 TodoList, TodoHeader 等 View 
+	 只單純的負責接收父元件傳遞的 props，並將它們顯示出來！
+ */
 
 
 window.App.TodoApp = TodoApp;

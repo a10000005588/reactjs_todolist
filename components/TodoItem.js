@@ -20,6 +20,9 @@ class TodoItem extends React.Component {
     this.setState({editable: !this.state.editable});
   }
 
+
+
+
   renderViewMode(){
     const { 
       title, 

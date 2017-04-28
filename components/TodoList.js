@@ -27,7 +27,6 @@ class TodoList extends React.Component{
 					onUpdate={(content) => onUpdateTodo && onUpdateTodo(todo.id, content)}
 					onDelete={() => onDeleteTodo && onDeleteTodo(todo.id)}
 					onToggle={(completed) => onToggleTodo && onToggleTodo(todo.id, completed)}
-					
 				/>
 			</li>
 
