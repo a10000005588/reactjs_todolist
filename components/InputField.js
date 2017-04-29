@@ -52,9 +52,9 @@ class InputField extends React.Component {
 	}
 
 	handleButtonDown(){
-		console.log(this.props.submitName);
+
 		const {
-			onSubmitEditing
+			onSubmitEditing,
 		} = this.props;
 		const { value } = this.state;
 
@@ -83,7 +83,7 @@ class InputField extends React.Component {
 	     //注意這裡的onBlur的函式 由於是父元件的 所以要在最上面的
 	     //constructor中 用super來繼承 才能使用！
 			<div>
-				<input {...this.props} 
+				<input  //這裡有問題
 					   type="text" 
 					   value={this.state.value}
 					   onChange={this.handleChange}
@@ -96,9 +96,5 @@ class InputField extends React.Component {
 		);
 	}
 }
-
-InputField.propTypes = {
-	onSubmitEditing: React.PropTypes.func
-};
 
 window.App.InputField = InputField;

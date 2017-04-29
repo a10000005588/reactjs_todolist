@@ -91,17 +91,4 @@ class TodoItem extends React.Component {
   }
 }
 
-TodoItem.propTypes = {
-  title : React.PropTypes.string.isRequired,
-  completed : React.PropTypes.bool.isRequired,
-  onDelete : React.PropTypes.func,  //注意這裡的預設為func
-  onToggle : React.PropTypes.func
-};
-/*
-TodoItem.defaultProps = {
-  title: "helloworld",
-  completed: false,
-  onDelete: false
-}; */
-
 window.App.TodoItem = TodoItem;

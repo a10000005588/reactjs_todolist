@@ -3,14 +3,24 @@
 const { ActionTypes } = window.App;
 
 const _createTodo = (todos, title) => {
-  return [
-    ...todos,
-    {
-      id: todos[todos.length - 1].id + 1,
-      title,
-      completed: false
-    }
-  ];
+  if(todos.length == 0){ //如果只剩0項 
+    return [
+      {
+        id: 1,
+        title,
+        completed: false
+      }
+    ]
+  }else{
+    return [
+      ...todos,
+      {
+        id: todos[todos.length - 1].id + 1,
+        title,
+        completed: false
+      }
+    ];
+  }
 };
 
 const _updateTodo = (todos, id, title) => {
@@ -42,6 +52,7 @@ const _deleteTodo = (todos, id) => {
   if (idx === -1) return todos;
 
   const newTodos = [ ...todos ];
+
   newTodos.splice(idx, 1);
   return newTodos;
 };

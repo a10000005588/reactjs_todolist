@@ -1,8 +1,5 @@
 const {TodoItem} = window.App;
 
-
-
-
 class TodoList extends React.Component{
 
 //    使用 props 傳遞 callback 的好處是，可以不用在底層 view 元件中加入業務邏輯。
@@ -38,14 +35,5 @@ class TodoList extends React.Component{
 		);
 	}
 }
-
-
-TodoList.propTypes = {
-  todos: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  onDeleteTodo: React.PropTypes.func,
-  onToggleTodo: React.PropTypes.func,
-  onUpdateTodo: React.PropTypes.func
-};
-
 
 window.App.TodoList = TodoList;

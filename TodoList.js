@@ -40,13 +40,4 @@ class TodoList extends React.Component{
 	}
 }
 
-
-TodoList.propTypes = {
-  todos: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  onDeleteTodo: React.PropTypes.func,
-  onToggleTodo: React.PropTypes.func,
-  onUpdateTodo: React.PropTypes.func
-};
-
-
 window.App.TodoList = TodoList;

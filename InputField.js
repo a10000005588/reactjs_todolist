@@ -97,8 +97,4 @@ class InputField extends React.Component {
 	}
 }
 
-InputField.propTypes = {
-	onSubmitEditing: React.PropTypes.func
-};
-
 window.App.InputField = InputField;
