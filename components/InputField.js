@@ -61,7 +61,6 @@ class InputField extends React.Component {
 		switch(this.props.submitName){
 			// case '修改':
 			// 		onSubmitEditing && onSubmitEditing(value);
-				
 			// 	break;
 			case '新增':
 
@@ -77,13 +76,16 @@ class InputField extends React.Component {
 	}
 
 	render() {
+		const { onBlur } = this.props;   //接收parent component's onBlur function。this.toggleEdit()
 		return (
-		 //...this.props將 上層元件的其他屬性 立榮TodoItem.js
+		 //...this.props將 上層元件的其他屬性 例如TodoItem.js
 	     //傳來的 autoFocus ,onBlur={this.toggleEditMode} , 
 	     //注意這裡的onBlur的函式 由於是父元件的 所以要在最上面的
 	     //constructor中 用super來繼承 才能使用！
 			<div>
-				<input  //這裡有問題
+				<input  
+					   autoFocus
+					   onBlur={ onBlur }
 					   type="text" 
 					   value={this.state.value}
 					   onChange={this.handleChange}
